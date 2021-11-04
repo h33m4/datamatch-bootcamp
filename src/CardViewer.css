@@ -1,0 +1,8 @@
+.flashcard {
+    border: 2px solid black;
+    margin: 2rem 0;
+}
+
+.flashcard td {
+    padding: 4rem 7rem;
+}
