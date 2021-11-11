@@ -1,14 +1,44 @@
 import React from 'react';
 import './CardViewer.css';
 
+import { Link } from 'react-router-dom';
+
 class CardViewer extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state = {
+            currentIndex: 0,
+            currentFace: "front",
+        };
+    }
     
-    getCurrentCard = () => this.props.getCurrentCard();
+    getCurrentCard = () => {
+        if (this.state.currentFace === "front") {
+          return this.props.cards[this.state.currentIndex].front;
+        }
+        else if (this.state.currentFace === "back") {
+          return this.props.cards[this.state.currentIndex].back;
+        }
+    }
 
-    switchFace = () => this.props.switchFace();
+    switchFace = () => {
+    let newFace = this.state.currentFace === "front" ? "back" : "front";
+    this.setState({currentFace: newFace});
+    }
 
-    prevCard = () => this.props.prevCard();
-    nextCard = () => this.props.nextCard();
+    prevCard = () => {
+        if (this.state.currentIndex > 0) {
+          this.setState({currentIndex: this.state.currentIndex - 1});
+          this.setState({currentFace: "front"});
+        }
+    }
+
+    nextCard = () => {
+        if (this.state.currentIndex < this.props.cards.length - 1) {
+          this.setState({currentIndex: this.state.currentIndex + 1});
+          this.setState({currentFace: "front"});
+        }
+    }
 
     render() {
         const currentCardFace = this.getCurrentCard();
@@ -16,6 +46,7 @@ class CardViewer extends React.Component {
         return (
             <div>
                 <h2>Card Viewer</h2>
+                <p>Card {this.state.currentIndex + 1}/{this.props.cards.length}</p>
                 <table onClick={this.switchFace} className="flashcard">
                     <tbody>
                     <tr>
@@ -23,9 +54,18 @@ class CardViewer extends React.Component {
                     </tr>
                     </tbody>
                 </table>
-                <button onClick={this.prevCard}>Previous Card</button>
-                <button onClick={this.nextCard}>Next Card</button>
-                <p>Card {this.props.currentIndex + 1}/{this.props.numCards}</p>
+                <button
+                disabled={this.state.currentIndex === 0} 
+                onClick={this.prevCard}>
+                    Previous Card
+                </button>
+                <button 
+                disabled={this.state.currentIndex === this.props.cards.length - 1}
+                onClick={this.nextCard}>
+                    Next Card
+                </button>
+                <hr></hr>
+                <button><Link to="/editor">Go to Editor</Link></button>
             </div>
 
         );

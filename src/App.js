@@ -1,6 +1,9 @@
 import React from 'react';
 import CardEditor from './CardEditor';
 import CardViewer from './CardViewer';
+import HomePage from './HomePage';
+
+import { Routes, Route } from 'react-router-dom';
 
 class App extends React.Component {
   constructor(props) {
@@ -10,8 +13,7 @@ class App extends React.Component {
         {front: 'front1', back: 'back1'},
         {front: 'front2', back: 'back2'},
       ],
-      currentIndex: 0,
-      currentFace: "front",
+      editor: true,
     };
   }
 
@@ -25,50 +27,43 @@ class App extends React.Component {
     cards.splice(index, 1);
     this.setState({cards});
   }
-
-  getCurrentCard = () => {
-    if (this.state.currentFace === "front") {
-      return this.state.cards[this.state.currentIndex].front;
+/*
+  switchMode = () => {
+    if (this.state.editor) {
+      this.setState({
+        editor: false,
+      });
     }
-    else if (this.state.currentFace === "back") {
-      return this.state.cards[this.state.currentIndex].back;
+    else {
+      this.setState({
+        editor: true,
+      });
     }
-  }
-
-  nextCard = () => {
-    if (this.state.currentIndex < this.state.cards.length - 1) {
-      this.setState({currentIndex: this.state.currentIndex + 1});
-      this.setState({currentFace: "front"});
-    }
-  }
-
-  prevCard = () => {
-    if (this.state.currentIndex > 0) {
-      this.setState({currentIndex: this.state.currentIndex - 1});
-      this.setState({currentFace: "front"});
-    }
-  }
-
-  switchFace = () => {
-    let newFace = this.state.currentFace === "front" ? "back" : "front";
-    this.setState({currentFace: newFace});
-  }
+    
+    WHY DOES THE BELOW CODE NOT WORK?
+    this.setState({
+        editor: ![this.state.editor],
+      });
+    ALSO, WHY DOES console.log(this.state.editor) before and after the change display the same value?
+    
+  }*/
   
   render() {
     return (
-    <>
-    <CardEditor 
-    addCard={this.addCard} 
-    deleteCard={this.deleteCard} 
-    cards={this.state.cards} />
-    <CardViewer 
-    nextCard={this.nextCard} 
-    prevCard={this.prevCard} 
-    getCurrentCard={this.getCurrentCard}
-    switchFace={this.switchFace}
-    currentIndex={this.state.currentIndex}
-    numCards={this.state.cards.length}/>
-    </>
+      <Routes>
+        <Route path="/" element={
+          <HomePage />
+        }></Route>
+        <Route path="/viewer" element={
+           <CardViewer cards={this.state.cards}/>
+        }></Route>
+        <Route path="/editor" element={
+          <CardEditor 
+          addCard={this.addCard} 
+          deleteCard={this.deleteCard} 
+          cards={this.state.cards} />
+        }></Route>
+    </Routes>
     );
   }
 }
