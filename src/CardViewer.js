@@ -6,13 +6,22 @@ import { Link } from 'react-router-dom';
 class CardViewer extends React.Component {
     constructor (props) {
         super(props);
+
+        let index = this.props.cards.length === 0 ? -1 : 0;
+
         this.state = {
-            currentIndex: 0,
+            currentIndex: index,
             currentFace: "front",
         };
     }
     
     getCurrentCard = () => {
+        // check if set of cards is empty
+        if (this.props.cards.length === 0) {
+            return "No cards to display...";
+        }
+
+        // get card-face based on currentFace
         if (this.state.currentFace === "front") {
           return this.props.cards[this.state.currentIndex].front;
         }
@@ -55,7 +64,7 @@ class CardViewer extends React.Component {
                     </tbody>
                 </table>
                 <button
-                disabled={this.state.currentIndex === 0} 
+                disabled={this.state.currentIndex <= 0} 
                 onClick={this.prevCard}>
                     Previous Card
                 </button>
