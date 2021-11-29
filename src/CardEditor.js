@@ -61,7 +61,7 @@ class CardEditor extends React.Component {
                     Add Card
                 </button>
                 <hr></hr>
-                <button><Link to="/viewer">Go to Viewer</Link></button>
+                <button><Link to="/">Home</Link></button>
             </div>
         );
     }

@@ -47,8 +47,8 @@ class App extends React.Component {
         <Route exact path="/">
           <HomePage />
         </Route>
-        <Route exact path="/viewer">
-          <CardViewer cards={this.state.cards}/>
+        <Route path="/viewer/:deckId">
+          <CardViewer />
         </Route>
         <Route exact path="/editor">
         <CardEditor 
@@ -56,8 +56,11 @@ class App extends React.Component {
           deleteCard={this.deleteCard} 
           cards={this.state.cards} />
         </Route>
-        <Route exact path="/test">
+        <Route path="/test/:id">
           <Test />
+        </Route>
+        <Route>
+          <div>Page not found...</div>
         </Route>
       </Switch>
       /* ALTERNATIVE METHOD WITH NEWER VERSION OF 'react-router-dom'

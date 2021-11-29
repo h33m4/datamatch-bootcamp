@@ -3,11 +3,17 @@ import './CardViewer.css';
 
 import { Link } from 'react-router-dom';
 
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { firebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
+import { compose } from 'redux';
+
+
 class CardViewer extends React.Component {
     constructor (props) {
         super(props);
-
-        let index = this.props.cards.length === 0 ? -1 : 0;
+        
+        let index = 0; // NEED TO FIX CARD 1/3 ISSUE IF CARDS IS EMPTY
 
         this.state = {
             currentIndex: index,
@@ -50,11 +56,15 @@ class CardViewer extends React.Component {
     }
 
     render() {
+        if (!isLoaded(this.props.cards)) {
+            return <div>Loading...</div>
+        }
+
         const currentCardFace = this.getCurrentCard();
 
         return (
             <div>
-                <h2>Card Viewer</h2>
+                <h2>{this.props.name}</h2>
                 <p>Card {this.state.currentIndex + 1}/{this.props.cards.length}</p>
                 <table onClick={this.switchFace} className="flashcard">
                     <tbody>
@@ -74,11 +84,27 @@ class CardViewer extends React.Component {
                     Next Card
                 </button>
                 <hr></hr>
-                <button><Link to="/editor">Go to Editor</Link></button>
+                <button><Link to="/">Home</Link></button>
             </div>
 
         );
     }
 }
 
-export default CardViewer;
+const mapStateToProps = state => {
+    console.log(state);
+    const deck = state.firebase.data.deck;
+    const name = deck && deck.name;
+    const cards = deck && deck.cards;
+    return {name: name, cards: cards};
+}
+
+export default compose(
+    withRouter,
+    firebaseConnect(props => {
+        console.log('props', props);
+        const deckId = props.match.params.deckId;
+        return [{path:`/flashcards/${deckId}`, storeAs: 'deck'}]}
+    ),
+    connect(mapStateToProps),    
+)(CardViewer);
