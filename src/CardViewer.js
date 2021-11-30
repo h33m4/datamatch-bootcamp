@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { firebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect, isLoaded } from 'react-redux-firebase';
 import { compose } from 'redux';
 
 
@@ -73,6 +73,7 @@ class CardViewer extends React.Component {
                     </tr>
                     </tbody>
                 </table>
+                <br/>
                 <button
                 disabled={this.state.currentIndex <= 0} 
                 onClick={this.prevCard}>
